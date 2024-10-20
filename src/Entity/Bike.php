@@ -3,13 +3,25 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
 use App\Repository\BikeRepository;
+use App\Validator\NotUpdatable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation\Timestampable;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: BikeRepository::class)]
 #[ApiResource]
+#[Delete]
+#[Get]
+#[Patch(validationContext: ['groups' => ['Default', 'patchValidation']])]
+#[GetCollection]
+#[Post(validationContext: ['groups' => ['Default', 'postValidation']])]
 class Bike
 {
     #[ORM\Id]
@@ -17,18 +29,26 @@ class Bike
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 50)]
     #[ORM\Column(length: 50)]
     private ?string $model = null;
 
+    #[Assert\NotNull]
     #[ORM\Column]
     private ?int $cylinderCapacity = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 40)]
     #[ORM\Column(length: 40)]
     private ?string $brand = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 255)]
     #[ORM\Column(length: 255)]
     private ?string $type = null;
 
+    #[Assert\Count(max: 20)]
     #[ORM\Column(type: Types::SIMPLE_ARRAY)]
     private array $extras = [];
 
@@ -43,6 +63,8 @@ class Bike
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updatedAt = null;
 
+    #[Assert\NotNull(groups: ['postValidation'])]
+    #[NotUpdatable(groups: ['patchValidation'])]
     #[ORM\Column]
     private ?bool $limitedEdition = null;
 
