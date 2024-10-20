@@ -2,6 +2,10 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Common\Filter\SearchFilterInterface;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
@@ -22,6 +26,22 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[Patch(validationContext: ['groups' => ['Default', 'patchValidation']])]
 #[GetCollection]
 #[Post(validationContext: ['groups' => ['Default', 'postValidation']])]
+#[
+    ApiFilter(
+        SearchFilter::class,
+        properties: [
+            'model' => SearchFilterInterface::STRATEGY_PARTIAL,
+            'cylinderCapacity' => SearchFilterInterface::STRATEGY_EXACT,
+            'brand' => SearchFilterInterface::STRATEGY_PARTIAL,
+            'type' => SearchFilterInterface::STRATEGY_EXACT,
+            'weight' => SearchFilterInterface::STRATEGY_EXACT,
+        ]
+    ),
+    ApiFilter(
+        OrderFilter::class,
+        properties: ['id', 'model', 'brand', 'cylinderCapacity', 'weight', 'type'],
+    ),
+]
 class Bike
 {
     #[ORM\Id]
