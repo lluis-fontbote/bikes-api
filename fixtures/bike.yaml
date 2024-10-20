@@ -1,0 +1,9 @@
+App\Entity\Bike:
+    bike_{1..50}:
+        model: '<randomElement(["CBR600RR", "MT-07", "Ninja 400", "Panigale V4", "S1000RR"])>'
+        cylinderCapacity: '<randomElement([600, 689, 399, 1103, 999])>'
+        brand: '<randomElement(["Honda", "Yamaha", "Kawasaki", "Ducati", "BMW"])>'
+        type: '<randomElement(["Naked", "Custom", "Classic"])>'
+        extras: '<randomElements(["ABS", "control de tracción", "navegador GPS", "calefacción en puños", "iluminación LED", "suspensión electrónica", "conectividad Bluetooth", "asistencia en pendiente", "quickshifter", "manillar ajustable"], null)>'
+        weight: '<randomElement([195, 184, 168, 198, 193])>'
+        limitedEdition: '<numberBetween(0, 1)>'
